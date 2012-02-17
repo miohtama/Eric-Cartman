@@ -98,7 +98,7 @@
          */
         contents : [],
 
-        init : function() {
+        refreshStore : function() {
             this.contents = store.get(this.storeId) || [];
             this.trigger("cartinit");
             this.trigger("cartchanged");
@@ -111,9 +111,11 @@
          *
          * @param {Object} item must have id and count attributes.
          */
-        addItem : function(item) {
+        add : function(item) {
 
-            if(this.getItemId(item)) {
+
+            var itemId = this.getItemId(item);
+            if(!itemId) {
                 throw new Error("Missing item id");
             }
 
@@ -121,13 +123,16 @@
                 throw new Error("Item does not have count");
             }
 
-            var existingRecord = this.get(item.id);
+            var existingRecord = this.get(itemId);
             var existingCount;
 
             if(!existingRecord) {
+                // Goes to the cart for the first time
                 existingRecord = {};
+                this.contents.push(existingRecord);
                 existingCount = 0;
             } else {
+                // Update existing count in the cart
                 existingCount = existingRecord.count;
             }
 
@@ -143,8 +148,10 @@
 
         remove : function(id) {
             var i;
+            var item;
+
             for(i=0; i<this.contents.length; i++) {
-                var item = this.contents[i];
+                item = this.contents[i];
                 var itemId = this.getItemId(item);
                 if(itemId == id) {
                     break;
@@ -154,12 +161,11 @@
             // Remove by index
             if(i < this.contents.length) {
                 this.contents.splice(i, i);
+                this.updateStore();
+                this.trigger("cartremove", [item]);
+                this.trigger("cartchanged");
             }
 
-            this.updateStore();
-
-            this.trigger("cartremove", [item]);
-            this.trigger("cartchanged");
         },
 
         clear : function() {
@@ -195,7 +201,7 @@
          * @return {Array} Cart contents as array of stored item
          */
         getContents : function() {
-            return this.cart;
+            return this.contents;
         },
 
         /**
@@ -214,5 +220,7 @@
             $(document).trigger(event, [this] + args);
         }
 };
+
+window.Cartman = Cartman;
 
 }(jQuery));

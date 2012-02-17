@@ -1,14 +1,51 @@
 <html>
         <head>
+                <title>Eric Cartman test page</title>
+                <script src=jquery.js></script>
+                <script src=jquery.transparency.min.js></script>
+                <script src=store+json2.min.js></script>
+                <script src=cartman.js></script>
+                <script src=cartman-ui.js></script>
 
+                <script>
+                        /*global $,Cartman,CartmanUI*/
+                        $(document).ready(function() {
+                                var cartman = new Cartman();
+                                var ui = new CartmanUI({cartman:cartman});
+
+                                // Boostrap UI
+                                ui.init();
+
+                                // Load cart from localStorage,
+                                cartman.refreshStore();
+                        });
+                </script>
         </head>
 
         <body>
 
-                <div class="random-item-list">
+                <h1>Item list</h1>
+                <div class="product-list">
+                        <div class="product">
+                                <h2>Product 1</h2>
+                                <input type="number" value="1" class="add-count" />
+                                <button type="button" class="add-button">
+                                        Add
+                                </button>
+                                <input class="product-data" type="hidden" value='{ "id" : "product1", "price" : 3 }' />
+                        </div>
+
+                        <div class="product">
+                                <h2>Product 2</h2>
+                        </div>
+
+                        <div class="product" data-unavailable="data-unavailable">
+                                <h2>Product 3</h2>
+                        </div>
                 </div>
 
-                <div id="mini-cart">
+                <h1>Shopping Cart</h1>
+                <div id="minicart">
                 </div>
 
                 <!-- Transparency tempaltes for cart management -->
@@ -16,12 +53,19 @@
 
                         <!-- Shopping cart appearing on every page -->
                         <div id="mini-cart-template">
+                                <div>
+                                        You have <b data-bind="count"></b> items of total value <b data-bind="total"></b>.
+                                </div>
 
+                                <div>
+                                        <!-- This actual go to the same page -->
+                                        <a href="#">Edit</a>
+                                        <a href="#">Checkout</a>
+                                </div>
                         </div>
 
                         <!-- Pop-up checkout list -->
                         <div id="checkout-template">
-
                         </div>
 
                 </div>
