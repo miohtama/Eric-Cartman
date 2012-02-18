@@ -151,7 +151,9 @@
                     "checkout-line@data-id" : function() { return this.id; },
                     "count@value" : function() { return this.count; },
                     price : function() { return self.formatPrice(this.price); },
-                    total : function() { return self.formatPrice(this.count*this.price); }
+                    total : function() { return self.formatPrice(this.count*this.price); },
+                    // Fill in image column only if image URL is available
+                    "img@src" : function(elem) { if(this.img) { return this.img; } else { elem.remove(); } }
                 }
             };
 
@@ -293,6 +295,7 @@
                     if(count > 0) {
                         item.count = count;
                         self.cartman.add(item);
+                        self.animateAdd(product);
                     }
 
                 });
@@ -323,6 +326,47 @@
                 console.error("Bad product JSON data:" + val);
                 throw e;
             }
+        },
+
+
+        /**
+         * Do item add into basket animation.
+         */
+        animateAdd : function(elem) {
+            var source = elem.find("img");
+            var target = $("#mini-cart");
+
+            var sourcePosition = source.position();
+            var stop = sourcePosition.top;
+            var sleft = sourcePosition.left;
+
+            var targetPosition = target.position();
+            var targetArea = target;
+
+            // Create clone of the source element which will
+            // be imposed on the fly animation
+            source = source.clone().appendTo($("body"));
+
+            source.css({
+                "position": "absolute",
+                "top": stop,
+                "left": sleft,
+                "z-index" : 5000,
+                "opacity" : 0.5
+            });
+
+            source.animate(
+            {
+                top: targetPosition.top + targetArea.height(),
+                left: targetPosition.left
+            },
+            {
+                duration: 500,
+                // We must remove the element - even if it's invisible
+                // it will block form fields and buttons beneath it
+                complete : function() { $(this).remove(); }
+            });
+
         },
 
         /**
