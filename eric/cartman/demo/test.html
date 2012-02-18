@@ -1,0 +1,311 @@
+<html>
+    <!-- Sorry about mixing HTML5 quote and non-quote attribute syntaxes :( -->
+    <head>
+        <title>Eric Cartman test page</title>
+        <link rel=stylesheet href="bootstrap/css/bootstrap.css">
+        <link rel=stylesheet href="bootstrap/css/bootstrap-responsive.css">
+        <!-- Core logic -->
+        <script src="misc/jquery.js"></script>
+        <script src="../static/store+json2.min.js"></script>
+        <script src="../static/cartman.js"></script>
+        <!-- Example UI -->
+        <script src=" bootstrap/js/bootstrap.js"></script>
+        <script src="misc/jquery.tools.min.js"></script>
+        <script src="../static/jquery.transparency.min.js"></script>
+        <script src="../static/cartman-ui.js"></script>
+        <script>
+            /*global $,Cartman,CartmanUI*/
+            $(document).ready(function() {
+                var cartman = new Cartman();
+                var ui = new CartmanUI({
+                    cartman : cartman
+                });
+
+                // Bootstrap UI
+                ui.init();
+
+                // Load cart from localStorage,
+                cartman.refreshStore();
+            });
+
+        </script>
+        <style>
+
+                #mini-cart .btn {
+                    margin-left: 10px;
+                    margin-bottom: 5px;
+                }
+
+                /* From http://flowplayer.org/tools/demos/overlay/index.html */
+
+                /* the overlayed element */
+                .simple-overlay {
+
+                        /* must be initially hidden */
+                        display: none;
+                        /* place overlay on top of other elements */
+                        z-index: 10000;
+                        /* styling */
+                        background-color: white;
+                        width: 675px;
+                        min-height: 200px;
+                        border: 1px solid #666;
+                        /* CSS3 styling for latest browsers */
+                        -moz-box-shadow: 0 0 90px 5px #000;
+                        -webkit-box-shadow: 0 0 90px #000;
+                }
+                /* close button positioned on upper right corner */
+                .simple-overlay .close {
+                        background-image: url(misc/close.png);
+                        position: absolute;
+                        right: -15px;
+                        top: -15px;
+                        cursor: pointer;
+                        height: 35px;
+                        width: 35px;
+                }
+                #checkout-popup {
+                        padding: 15px;
+                }
+                .checkout-list {
+                        width: 100%;
+                        border-collapse: collapse;
+                        border: 1px solid #eee;
+                        margin-bottom: 20px;
+                }
+                .checkout-list td, .checkout-list th {
+                        vertical-align: top;
+                        text-align: left;
+                        border: 1px solid #eee;
+                        padding: 5px;
+                }
+                .checkout-list td.column-price, .checkout-list td.column-total {
+                        text-align: right;
+                }
+                .checkout-list .column-count {
+                        text-align: center;
+                }
+                .checkout-list .column-count input {
+                        width: 70px;
+                        text-align: center;
+                }
+                .checkout-list .column-remove {
+                        cursor: pointer;
+                        color: #a00;
+                        text-align: center;
+                }
+                .checkout-list .column-remove:hover {
+                        background: #fee;
+                }
+                .checkout-list .discreet {
+                        font-size: 80%;
+                        color: #aaa;
+                }
+                .checkout-footer {
+                        text-align: right;
+                }
+                .checkout-footer .remove-all {
+                        float: left;
+                }
+                .checkout-footer .update, .checkout-footer .checkout {
+                        float: right;
+                }
+                .empty-checkout {
+                        text-align: center;
+                        margin-top: 40px;
+                }
+
+        </style>
+    </head>
+    <body>
+        <div class="navbar navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container">
+                    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </a>
+                    <a class="brand" href="#">Eric Cartman</a>
+                    <div class="nav-collapse">
+                        <ul class="nav">
+                            <li class="active">
+                                <a href="#">Home</a>
+                            </li>
+                        </ul>
+                    </div><!--/.nav-collapse -->
+
+                    <div class="navbar-text pull-right">
+                        <div id="mini-cart">
+                            <!-- Filled in by template -->
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="hero-unit">
+                <h1>Eric Cartman</h1>
+                <p>
+                    This is a demo shopping cart based on Twitter Bootstrap 2.0 layout and Transparency templates.
+                </p>
+                <p>
+                    <a class="btn btn-primary btn-large" href="https://github.com/miohtama/Eric-Cartman">View on GitHub &raquo;</a>
+                </p>
+            </div>
+
+            <h1>Products</h1>
+
+            <div class="product-list row">
+
+                <!-- This listing is generated by a server-side template -->
+                <div class="product span4">
+                    <h2>Product 1</h2>
+                    <p>
+                        3 EUR
+                    </p>
+                    <input type="number" value="1" class="add-count" />
+                    <button type="button" class="add-button">
+                        Add
+                    </button>
+                    <input class="product-data" type="hidden" value='{ "id" : "XYZ-1", "name" : "Product 1", "price" : 3 }' />
+                </div>
+                <div class="product span4">
+                    <h2>Product 2</h2>
+                    <p>
+                        5 EUR
+                    </p>
+                    <input type="number" value="1" class="add-count" />
+                    <button type="button" class="add-button">
+                        Add
+                    </button>
+                    <input class="product-data" type="hidden" value='{ "id" : "XYZ-2", "name" : "Product 2", "price" : 5 }' />
+                </div>
+                <div class="product span4" data-unavailable="data-unavailable">
+                    <h2>Product 3</h2>
+                </div>
+            </div>
+
+        </div>
+
+
+        </div>
+        <!-- End of container -->
+
+
+        <div id="pop-ups">
+            <div id="checkout-popup" class="simple-overlay">
+                <!-- Filled in by template -->
+            </div>
+        </div>
+
+        <!--
+        Transparency tempaltes for cart management.
+
+        There are "template sources". Templates are run
+        against cart data to generte final user interface elements
+        to the page body.
+        -->
+        <div id="templates" style="display: none">
+            <!-- Shopping cart summary appearing on every page -->
+            <div id="mini-cart-template">
+
+                <div>
+                    <i class="icon-shopping-cart icon-white"></i>
+
+                    <span data-bind="empty">
+                        Your shopping cart is empty.
+                    </span>
+
+                    <span data-bind="filled">
+
+                        <span>You have </span>
+                        <b data-bind="count"></b>
+                        <span> items (</span><b data-bind="total"></b>
+                        <span> EUR)</span>.
+
+                        <button class="btn">
+                            <i class="icon-edit"></i>
+                            Edit
+                        </button>
+
+                        <button class="btn">
+                            <i class="icon-check"></i>
+                            Checkout
+                        </button>
+
+                    </span>
+                </div>
+            </div>
+            <!--
+            Pop-up window checkout list with count edit and delete
+
+            Crude example suitable for Finnish eCommerce site.
+            -->
+            <div id="checkout-popup-template">
+                <a class="close"></a>
+                <table class="checkout-list">
+                    <thead>
+                        <tr>
+                            <th> SKU </th>
+                            <th> Name </th>
+                            <th  class="column-price">
+                            <div>
+                                Price
+                            </div>
+                            <div class=discreet>
+                                (EUR, VAT 23%)
+                            </div></th>
+                            <th class="column-count"> Count </th>
+                            <th class="column-total">
+                            <div>
+                                Total
+                            </div>
+                            <div class=discreet>
+                                (EUR, VAT 23%)
+                            </div></th>
+                            <th> Remove </th>
+                        </tr>
+                    </thead>
+                    <tbody data-bind="products">
+                        <tr class="checkout-line">
+                            <td data-bind="id"></td>
+                            <td data-bind="name"></td>
+                            <td data-bind="price" class="column-price"></td>
+                            <td class="column-count">
+                            <input data-bind="count" type="number" val="" />
+                            </td>
+                            <td data-bind="total" class="column-total"></td>
+                            <td class=column-remove> &#x2a2f; </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="checkout-footer">
+                    <div class="checkout-total">
+                        Total <b data-bind="total"></b> EUR
+                    </div>
+                    <div class=checkout-buttons>
+                        <button type="button" class="remove-all">
+                            Remove all
+                        </button>
+                        <button type="button" class="update">
+                            Update counts
+                        </button>
+                        <button type="button" class="checkout">
+                            Checkout
+                        </button>
+                        <div style="clear: both">
+                            <!-- -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="checkout-popup-empty-template">
+                <a class="close"></a>
+                <p class="empty-checkout">
+                    No items in the cart
+                </p>
+            </div>
+
+        </div>
+    </body>
+</html>

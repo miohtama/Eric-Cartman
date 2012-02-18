@@ -88,17 +88,33 @@
 
             var self = this;
 
-            var data = this.getCartTemplateData();
+            var source = this.getCartTemplateData();
 
             var template = $("#mini-cart-template");
+
+            var data = {
+
+                filled : {
+                    count : source.count,
+                    total : source.total
+                }
+            };
+
+            var directives = {
+                // Hide empty cart message element if we have any items in the cart
+                empty : function(elem) { if(source.count) { elem.remove(); } },
+
+                // Hide cart controls if there are no picked items
+                filled : function(elem) { if(!source.count) { elem.remove(); } }
+            };
 
             elem.empty();
             elem.append(template.children().clone());
 
-            elem.render(data);
+            elem.render(data, directives);
 
             // Bind minicart link to open the checkout dialog
-            elem.find("a").click(function(e) {
+            elem.find("button").click(function(e) {
                 self.openCheckoutPopup();
                 e.preventDefault();
             });
