@@ -254,7 +254,7 @@
             var self = this;
 
             // All products on this page
-            var products = $(".product");
+            var products = $("[data-product]");
 
             products.each(function() {
 
@@ -294,12 +294,15 @@
         },
 
         /**
-         * Scrape UI for product data
+         * Extract product data JSON payload from DOM.
+         *
+         * Each product must come with data-product="" attribute which contains
+         * JSON payload of data for the product.
          *
          * @param {Object} elem jQuery selection of a product DOM
          */
         getItemData : function(elem) {
-            var val = elem.find(".product-data").val();
+            var val = elem.attr("data-product");
 
             if(!val) {
                 console.error("Product data missing for element:");
