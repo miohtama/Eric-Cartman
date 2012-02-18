@@ -17,6 +17,9 @@
      * document object. It is possible to have several shopping cart UI
      * listeners on the same page.
      *
+     * If you wish to override some behavior, e.g. formatPrice(), simply monkey-patch
+     * in new functions to an instance or subclass Cartman.
+     *
      */
     function Cartman(options) {
 
@@ -45,6 +48,13 @@
          * Item removed from the cart (cartman, item)
          */
         "cartremove",
+
+        /**
+         * @event
+         *
+         * Item mass-update success (cartman)
+         */
+        "cartupdateall",
 
         /**
          * @event
@@ -123,27 +133,67 @@
                 throw new Error("Item does not have count");
             }
 
+            if(!$.isNumeric(item.count)) {
+                throw new Error("Item count was not a number");
+            }
+
             var existingRecord = this.get(itemId);
             var existingCount;
 
             if(!existingRecord) {
-                // Goes to the cart for the first time
+                // Goes into the cart for the first time
                 existingRecord = {};
                 this.contents.push(existingRecord);
                 existingCount = 0;
             } else {
                 // Update existing count in the cart
-                existingCount = existingRecord.count;
+                // XXX: Don't use hardcoded count var
+                existingCount = parseFloat(existingRecord.count);
             }
 
+            // Override the contents of the existing record with new data
             $.extend(existingRecord, item);
 
+            // Remember the old item count and add it to the new item count
             existingRecord.count += existingCount;
 
             this.updateStore();
 
             this.trigger("cartadd", [item]);
             this.trigger("cartchanged");
+        },
+
+        /**
+         * Update cart data.
+         *
+         * Does not append any new products to the cart.
+         *
+         * Does not post any change events - suitable for mass updates.
+         *
+         * @param {Object} mappings { item id : { item new data mappings } }
+         *
+         * @param {Object} newData New object values to be applied on the existing cart item.
+         */
+        updateAll : function(mappings) {
+
+            var self = this;
+
+            $.each(function(id, newData) {
+
+                var existingRecord = self.get(id);
+
+                if(!existingRecord) {
+                    throw new Error("Tried to update non-existing item id " + id);
+                }
+
+                // Override the contents of the existing record with new data
+                $.extend(existingRecord, newData);
+
+            });
+
+            this.trigger("cartupdateall");
+            this.trigger("cartchanged");
+
         },
 
         remove : function(id) {
@@ -160,7 +210,11 @@
 
             // Remove by index
             if(i < this.contents.length) {
-                this.contents.splice(i, i);
+                if(this.contents.length > 1) {
+                    this.contents.splice(i, i);
+                } else {
+                    this.contents = [];
+                }
                 this.updateStore();
                 this.trigger("cartremove", [item]);
                 this.trigger("cartchanged");
@@ -169,7 +223,7 @@
         },
 
         clear : function() {
-            this.cart = [];
+            this.contents = [];
             this.updateStore();
             this.trigger("cartclear");
             this.trigger("cartchanged");
@@ -218,7 +272,8 @@
          */
         trigger :function(event, args) {
             $(document).trigger(event, [this] + args);
-        }
+        },
+
 };
 
 window.Cartman = Cartman;
