@@ -185,6 +185,7 @@
          * Does not append any new products to the cart.
          *
          * Does not post any change events - suitable for mass updates.
+         * If you set item count to zero or below it will be removed.
          *
          * @param {Object} mappings { item id : { item new data mappings } }
          *
@@ -194,7 +195,7 @@
 
             var self = this;
 
-            $.each(function(id, newData) {
+            $.each(mappings, function(id, newData) {
 
                 var existingRecord = self.get(id);
 
@@ -203,10 +204,20 @@
                 }
 
                 // Override the contents of the existing record with new data
-                $.extend(existingRecord, newData);
+
+                var count = self.getItemCount(newData);
+
+                if($.isNumeric(count) && count <= 0) {
+                    // Remove item
+                    removeFromArray(self.contents, existingRecord);
+                } else {
+                    // Mass update
+                    $.extend(existingRecord, newData);
+                }
 
             });
 
+            this.updateStore();
             this.trigger("cartupdateall");
             this.trigger("cartchanged");
 
@@ -247,6 +258,10 @@
          */
         getItemId : function(item) {
             return item[this.fields.id];
+        },
+
+        getItemCount : function(item) {
+            return item[this.fields.count];
         },
 
         /**

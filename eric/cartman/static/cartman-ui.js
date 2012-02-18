@@ -171,12 +171,19 @@
                 // This will rewrite product counts
                 var updateAllData = {};
 
+                // Loop through all checkout item lines, extract their
+                // new count and build an updated id -> count mappings
                 elem.find(".checkout-line").each(function() {
                     var $this = $(this);
                     var id = $this.attr("data-id");
 
-                    updateAllData[id] = {};
+                    var count = $this.find("input[data-bind=count]");
+                    count = count.val();
+
+                    updateAllData[id] = { count : count };
                 });
+
+                self.cartman.updateAll(updateAllData);
 
             });
 
@@ -241,7 +248,7 @@
         },
 
         /**
-         * Initialize product action handlers.
+         * Initialize product add-to-cart action handlers.
          *
          * Assume each product has
          *
