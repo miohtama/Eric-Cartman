@@ -1,8 +1,24 @@
-/*global jQuery,store*/
+/*global jQuery,store,window*/
 
 (function($) {
 
     "use strict";
+
+    /**
+     * Array manipulation helper
+     *
+     * http://stackoverflow.com/questions/4825812/clean-way-to-remove-element-from-javascript-array-with-jquery-coffeescript
+     */
+    function removeFromArray(arr, value) {
+        for (var i = 0; i < arr.length; ) {
+            if(arr[i] === value) {
+                arr.splice(i, 1);
+            } else {
+               ++i;
+            }
+        }
+    }
+
 
     /**
      * Shopping cart manager.
@@ -196,32 +212,29 @@
 
         },
 
+        /**
+         * Remove item from the cart.
+         *
+         * Silently ignore bad ids.
+         */
         remove : function(id) {
-            var i;
-            var item;
 
-            for(i=0; i<this.contents.length; i++) {
-                item = this.contents[i];
-                var itemId = this.getItemId(item);
-                if(itemId == id) {
-                    break;
-                }
+            var item = this.get(id);
+
+            if(!item) {
+                return;
             }
 
-            // Remove by index
-            if(i < this.contents.length) {
-                if(this.contents.length > 1) {
-                    this.contents.splice(i, i);
-                } else {
-                    this.contents = [];
-                }
-                this.updateStore();
-                this.trigger("cartremove", [item]);
-                this.trigger("cartchanged");
-            }
+            removeFromArray(this.contents, item);
+            this.updateStore();
+            this.trigger("cartremove", [item]);
+            this.trigger("cartchanged");
 
         },
 
+        /**
+         * Clear all items from the cart.
+         */
         clear : function() {
             this.contents = [];
             this.updateStore();
@@ -237,7 +250,9 @@
         },
 
         /**
-         * Makes an item stub or retrieves an existing item.
+         * Get item by id from the cart.
+         *
+         * If not found return null.
          */
         get : function(id) {
             var i;
@@ -272,7 +287,7 @@
          */
         trigger :function(event, args) {
             $(document).trigger(event, [this] + args);
-        },
+        }
 
 };
 
