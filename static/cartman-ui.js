@@ -5,6 +5,13 @@
     "use strict";
 
 
+    /**
+     * From jQuery 1.7 - start using the real thing when 1.7 is widely used
+     */
+    function isNumeric(obj) {
+        return !isNaN( parseFloat(obj) ) && isFinite( obj );
+    }
+
 
     /**
      * Default shopping cart UI implementation.
@@ -187,6 +194,7 @@
                     price : function() { return self.formatPrice(this.price); },
                     total : function() { return self.formatPrice(this.count*this.price); },
                     // Fill in image column only if image URL is available
+                    "img-url@href" : function(elem) { return this.url; },
                     "img@src" : function(elem) { if(this.img) { return this.img; } else { elem.remove(); } },
                     "name@href" : function(elem) { return this.url; }
                 }
@@ -251,7 +259,8 @@
             // User jQuery tools to init pop-up
             elem.overlay({
                 close : null,
-                load : false
+                load : false,
+                fixed : true
             });
 
         },
@@ -464,15 +473,7 @@
             return sum.toFixed(2);
         }
 
-
     };
-
-    /**
-     * From jQuery 1.7 - start using the real thing when 1.7 is widely used
-     */
-    function isNumeric(obj) {
-        return !isNaN( parseFloat(obj) ) && isFinite( obj );
-    }
 
 
     window.CartmanUI = CartmanUI;
