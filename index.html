@@ -1,0 +1,501 @@
+<html>
+    <!-- Sorry about mixing HTML5 quote and non-quote attribute syntaxes :( -->
+    <head>
+        <title>Eric Cartman test page</title>
+        <link rel=stylesheet href="bootstrap/css/bootstrap.css">
+        <link rel=stylesheet href="bootstrap/css/bootstrap-responsive.css">
+        <!-- Core logic -->
+        <script src="misc/jquery.js"></script>
+        <script src="../static/store+json2.min.js"></script>
+        <script src="../static/cartman.js"></script>
+        <!-- Example UI -->
+        <script src=" bootstrap/js/bootstrap.js"></script>
+        <script src="misc/jquery.tools.min.js"></script>
+        <script src="../static/jquery.transparency.min.js"></script>
+        <script src="../static/cartman-ui.js"></script>
+        <script>
+            /*global $,Cartman,CartmanUI*/
+            $(document).ready(function() {
+                var cartman = new Cartman();
+                var ui = new CartmanUI({
+                    cartman : cartman
+                });
+
+                // Bootstrap UI
+                ui.init();
+
+                // Load cart from localStorage,
+                cartman.refreshStore();
+            });
+
+        </script>
+        <style>
+
+                input[type=number] {
+                        height: 26px;
+                }
+
+                #mini-cart .btn {
+                        margin-left: 10px;
+                        margin-bottom: 5px;
+                }
+
+                /* From http://flowplayer.org/tools/demos/overlay/index.html */
+
+                /* the overlayed element */
+                .simple-overlay {
+
+                        /* must be initially hidden */
+                        display: none;
+                        /* place overlay on top of other elements */
+                        z-index: 10000;
+                        /* styling */
+                        background-color: white;
+                        width: 675px;
+                        min-height: 200px;
+                        border: 1px solid #666;
+                        /* CSS3 styling for latest browsers */
+                        -moz-box-shadow: 0 0 90px 5px #000;
+                        -webkit-box-shadow: 0 0 90px #000;
+                }
+                /* close button positioned on upper right corner */
+                .simple-overlay .close {
+                        background-image: url(misc/close.png);
+                        position: absolute;
+                        right: -15px;
+                        top: -15px;
+                        cursor: pointer;
+                        height: 35px;
+                        width: 35px;
+                }
+                .product-listing {
+                        margin: 5px;
+                        padding: 5px;
+                }
+                .product {
+                        padding-right: 10px;
+                }
+                .product:last-child {
+                        padding-right: 0;
+                }
+                .product form {
+                }
+
+                .product-image-wrapper {
+                    display: table-cell;
+                    vertical-align: middle;
+                    height: 210px;
+                }
+
+                .product-image {
+                        max-width: 150px;
+                        margin: 10px auto;
+                        display: block;
+                }
+                .add-count {
+                        text-align: right;
+                        width: 50px;
+                }
+
+                #checkout-popup {
+                        padding: 15px;
+                }
+                .checkout-list {
+                        width: 100%;
+                        border-collapse: collapse;
+                        border: 1px solid #eee;
+                        margin-bottom: 20px;
+                }
+
+                table.checkout-list td,
+                table.checkout-list thead th {
+                        text-align: left;
+                        border: 1px solid #eee;
+                        padding: 5px;
+                }
+
+                table.checkout-list td {
+                    vertical-align: middle;
+                }
+
+                table.checkout-list thead th {
+                    vertical-align: top;
+                }
+                .checkout-list img {
+                    max-width: 48px;
+                    max-height: 48px;
+                }
+
+                .checkout-list td.column-price, .checkout-list td.column-total {
+                        text-align: right;
+                }
+                .checkout-list .column-count {
+                        text-align: center;
+                }
+                .checkout-list .column-count input {
+                        width: 70px;
+                        margin-top: 10px;
+                        text-align: center;
+                }
+                .checkout-list .column-remove {
+                        cursor: pointer;
+                        color: #a00;
+                        text-align: center;
+                        font-size: 32px;
+                        font-weight: bold;
+                        vertical-align: middle;
+                }
+                .checkout-list .column-remove:hover {
+                        background: #fcc;
+                }
+                .checkout-list .discreet {
+                        font-size: 80%;
+                        color: #aaa;
+                }
+                .checkout-footer {
+                        text-align: right;
+                }
+                .checkout-footer .left {
+                        float: left;
+                }
+                .checkout-footer .right {
+                        float: right;
+                }
+                .empty-checkout {
+                        text-align: center;
+                        margin-top: 40px;
+                }
+
+
+                .those-cartmen {
+                    text-align: center;
+                    color: #888;
+                }
+        </style>
+    </head>
+    <body>
+        <div class="navbar navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container">
+                    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </a>
+                    <a class="brand" href="#">Eric Cartman</a>
+                    <div class="nav-collapse">
+                        <ul class="nav">
+                            <li class="active">
+                                <a href="#demo">Demo</a>
+                            </li>
+
+                            <li>
+                                <a href="#features">Features</a>
+                            </li>
+
+                            <li>
+                                <a href="#usage">Usage</a>
+                            </li>
+
+                            <li>
+                                <a href="#authors">Authors</a>
+                            </li>
+
+
+                        </ul>
+                    </div><!--/.nav-collapse -->
+                    <div class="navbar-text pull-right">
+                        <div id="mini-cart">
+                            <!-- Filled in by template -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="hero-unit">
+                <h1>Eric Cartman</h1>
+                <p>
+                    A modern HTML5 shopping cart implementation
+                </p>
+                <p>
+                    <a class="btn btn-primary btn-large" href="https://github.com/miohtama/Eric-Cartman">View on GitHub &raquo;</a>
+                </p>
+            </div>
+            <a name="demo"></a>
+            <h1>Demo shop</h1>
+            <p>
+                Shop at your heart's content
+            </p>
+            <hr>
+            <div data-product-listing class="row product-listing">
+                <!-- This listing is generated by a server-side template -->
+                <div data-product='{ "id" : "PR-1", "name" : "Product 1", "price" : 3, "img" : "misc/product1.png" }' class="span3 product">
+                    <h2>Product 1</h2>
+                    <div class="product-image-wrapper">
+                        <img src="misc/product1.png" class="product-image" />
+                    </div>
+                    <p>A very fine statue with a yellow decorator</p>
+                    <form class="well form-inline">
+                        <p>
+                            Price <strong>3.00</strong>
+                            EUR
+                        </p>
+                        <input type="number" value="1" class="add-count" />
+                        <button type="button" class="btn btn-primary add-button">
+                            <i class="icon-plus icon-white"></i>
+                            Add to cart
+                        </button>
+                    </form>
+                </div>
+                <div class="product span3" data-product='{ "id" : "PR-2", "name" : "Product 2", "price" : 5, "img" : "misc/product2.png" }'>
+                    <h2>Product 2</h2>
+                    <div class="product-image-wrapper">
+                        <img src="misc/product2.png" class="product-image" />
+                    </div>
+
+                    <p>An energic, mentally retarted, dog</p>
+                    <form class="well form-inline">
+                        <p>
+                            Price <strong>5.00</strong>
+                            EUR
+                        </p>
+                        <input type="number" value="1" class="add-count" />
+                        <button type="button" class="btn btn-primary add-button">
+                            <i class="icon-plus icon-white"></i>
+                            Add to cart
+                        </button>
+                    </form>
+                </div>
+
+                <div class="product span3" data-product='{ "id" : "PR-3", "name" : "Product 3", "price" : 500, "img" : "misc/product3.png" }'>
+                    <h2>Product 3</h2>
+                    <div class="product-image-wrapper">
+                        <img src="misc/product3.png" class="product-image" />
+                    </div>
+
+                    <p>A cozy wooden house next to a river</p>
+                    <form class="well form-inline">
+                        <p>
+                            Price <strong>500.00</strong>
+                            EUR
+                        </p>
+                        <div class="alert alert-warning">
+                            Out of stock
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+            <!-- End of product listing -->
+
+
+            <a name="features"></a>
+
+
+            <h1>Features</h1>
+
+            <div class="row">
+                <p class="span6">
+                    Eric Cartman is a backend technology neutral shopping cart implementation done in Javascript, designed
+                    to be integrated to various eCommerce products and custom sites.
+                    It offers various benefits over traditional session based customer tracking.
+                </p>
+            </div>
+
+
+            <div class="row">
+
+                <div class="span4">
+                    <h2>Why?</h2>
+                    <ul>
+                        <li><strong>HTML5 localStorage</strong> instead of server-side sessions. Shop web pages can be statically cached making your website blazingly fast, free of cookie and sticky server problems.</li>
+                        <li>Strong separation between <strong>logic, UI and templates</strong>. The clever design decisions allows you to drop Eric Cartman to heterogenous environments. Free of inline Javascript or HTML.</li>
+                        <li>Simple default UI which you can easily <strong>hack into pieces</strong> and adapt for your site</li>
+                    </ul>
+                </div>
+
+                <div class="span4">
+                    <h2>What?</h2>
+                    <ul>
+                        <li>Cart summary</li>
+                        <li>Checkout pop-up</li>
+                        <li>Adding and removing products</li>
+                        <li>Can be applied to other basket or collecting use cases which don't use counts or prices</li>
+                    </ul>
+                </div>
+
+                <div class="span4">
+                    <h2>Under the hood</h2>
+                    <ul>
+                        <li>Supported browsers: all desktop browsers IE7+, all mobile browsers.</li>
+                        <li>Javascript is JSLint compatible, commented and follows the best practices.</li>
+                        <li>Extensible minimalistic JSON model for product data - only required keys are <code>id</code> and <code>count</code></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row">
+                <div class="span4">
+                    <h2>Modules</h2>
+                    <ul>
+                        <li><code>cartman.js</code>: logic</li>
+                        <li><code>cartman-ui.js</code>: UI</li>
+                        <li><code>index.html</code>: default templates</li>
+                    </ul>
+                </div>
+
+                <div class="span4">
+                    <h2>Dependencies</h2>
+                    <ul>
+                        <li><a href="jquery.com">jQuery</a>
+                        <li><a href="https://github.com/marcuswestin/store.js">store.js</a>
+                        <li><a href="https://github.com/leonidas/transparency">Transparency templates</a>
+                        <li>Shipped with the downlaod</li>
+                    </ul>
+                </div>
+
+                <div class="span4">
+                    <h2>Integrations</h2>
+                    <ul>
+                        <li><code>collective.cartman</code> for <a href="http://plone.org">Plone CMS</a></li>
+                    </ul>
+                </div>
+
+                <p class="span12 those-cartmen">
+                    <span class="label label-info">Info</span> Similarities with the library name and other Eric Cartmen are purely coincidental
+                </p>
+            </div>
+
+            <a name="authors"></a>
+
+            <h1>Usage</h1>
+
+            <p>TODO</p>
+
+            <a name="authors"></a>
+
+            <h1>Authors</h1>
+
+            <p>
+                <a href="http://opensourcehacker.com/">Mikko Ohtama</a> (<a href="http://twitter.com/moo9000">Twitter</a>)
+            </p>
+
+            <p></p>
+            <p></p>
+            <p></p>
+
+        </div>
+        <!-- End of container -->
+        <div id="pop-ups">
+            <div id="checkout-popup" class="simple-overlay">
+                <!-- Filled in by template -->
+            </div>
+        </div>
+        <!--
+        Transparency tempaltes for cart management.
+
+        There are "template sources". Templates are run
+        against cart data to generte final user interface elements
+        to the page body.
+        -->
+        <div id="templates" style="display: none">
+            <!-- Shopping cart summary appearing on every page -->
+            <div id="mini-cart-template">
+                <div>
+                    <i class="icon-shopping-cart icon-white"></i>
+                    <span data-bind="empty"> Your shopping cart is empty. </span>
+                    <span data-bind="filled"> <span>You have </span> <b data-bind="count"></b> <span> items (</span><b data-bind="total"></b> <span> EUR)</span>.
+                        <button class="btn">
+                            <i class="icon-edit"></i>
+                            Edit
+                        </button>
+                        <button class="btn">
+                            <i class="icon-check"></i>
+                            Checkout
+                        </button> </span>
+                </div>
+            </div>
+            <!--
+            Pop-up window checkout list with count edit and delete
+
+            Crude example suitable for Finnish eCommerce site.
+            -->
+            <div id="checkout-popup-template">
+                <a class="close"></a>
+                <table class="checkout-list table table-condensed">
+                    <thead>
+                        <tr>
+                            <th><!-- image --></th>
+                            <th> SKU </th>
+                            <th> Name </th>
+                            <th  class="column-price">
+                            <div>
+                                Price
+                            </div>
+                            <div class=discreet>
+                                (EUR, VAT 23%)
+                            </div></th>
+                            <th class="column-count"> Count </th>
+                            <th class="column-total">
+                            <div>
+                                Total
+                            </div>
+                            <div class=discreet>
+                                (EUR, VAT 23%)
+                            </div></th>
+                            <th> Remove </th>
+                        </tr>
+                    </thead>
+                    <tbody data-bind="products">
+                        <tr class="checkout-line">
+                            <td>
+                                <img data-bind="img" />
+                            </td>
+                            <td data-bind="id"></td>
+                            <td data-bind="name"></td>
+                            <td data-bind="price" class="column-price"></td>
+                            <td class="column-count">
+                            <input data-bind="count" min="0" type="number" val="" />
+                            </td>
+                            <td data-bind="total" class="column-total"></td>
+                            <td class=column-remove><i class="icon-remove"></i></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="checkout-footer">
+                    <div class="checkout-total">
+                        Total <b data-bind="total"></b> EUR
+                    </div>
+                    <div class="checkout-buttons">
+
+                        <div class="left">
+                            <button type="button" class="btn btn-danger remove-all">
+                                <i class="icon-white icon-remove"></i>
+                                Remove all
+                            </button>
+                        </div>
+
+                        <div class="right">
+                            <button type="button" class="btn update">
+                                <i class="icon-refresh"></i>
+                                Update counts
+                            </button>
+
+                            <button type="button" class="btn btn-success checkout">
+                                <i class="icon-white icon-check"></i>
+                                Checkout
+                            </button>
+                        </div>
+
+                        <div style="clear: both">
+                            <!-- -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- checkout-popup-tempalte -->
+            <div id="checkout-popup-empty-template">
+                <a class="close"></a>
+                <p class="empty-checkout">
+                    No items in the cart
+                </p>
+            </div>
+        </div>
+    </body>
+</html>
