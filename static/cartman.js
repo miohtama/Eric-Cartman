@@ -4,6 +4,10 @@
 
     "use strict";
 
+    // http://opensourcehacker.com/2011/03/15/everyone-loves-and-hates-console-log/
+    // Ignore console on platforms where it is not available
+    if (typeof(window.console) == "undefined") { console = {}; console.log = console.warn = console.error = function(a) {}; }
+
     /**
      * Array manipulation helper
      *
@@ -17,6 +21,13 @@
                ++i;
             }
         }
+    }
+
+    /**
+     * From jQuery 1.7 - start using the real thing when 1.7 is widely used
+     */
+    function isNumeric(obj) {
+        return !isNaN( parseFloat(obj) ) && isFinite( obj );
     }
 
 
@@ -149,7 +160,7 @@
                 throw new Error("Item does not have count");
             }
 
-            if(!$.isNumeric(item.count)) {
+            if(!isNumeric(item.count)) {
                 throw new Error("Item count was not a number");
             }
 
@@ -207,7 +218,7 @@
 
                 var count = self.getItemCount(newData);
 
-                if($.isNumeric(count) && count <= 0) {
+                if(isNumeric(count) && count <= 0) {
                     // Remove item
                     removeFromArray(self.contents, existingRecord);
                 } else {
