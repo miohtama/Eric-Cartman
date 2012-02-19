@@ -4,6 +4,8 @@
 
     "use strict";
 
+
+
     /**
      * Default shopping cart UI implementation.
      *
@@ -153,7 +155,8 @@
                     price : function() { return self.formatPrice(this.price); },
                     total : function() { return self.formatPrice(this.count*this.price); },
                     // Fill in image column only if image URL is available
-                    "img@src" : function(elem) { if(this.img) { return this.img; } else { elem.remove(); } }
+                    "img@src" : function(elem) { if(this.img) { return this.img; } else { elem.remove(); } },
+                    "name@href" : function(elem) { return this.url; }
                 }
             };
 
@@ -198,6 +201,13 @@
                 // This will move forward in the checkout process
                 self.cartman.clear();
             });
+
+            elem.find(".checkout-line a").click(function() {
+                // Close pop-up when an item link in checkout pop-up is clicked
+                // because the link might point to the current page
+                elem.data("overlay").close();
+            });
+
 
             elem.find(".close").click(function() {
                 // Because close comes from the template and is not jQuery Tools
@@ -403,7 +413,7 @@
          */
         formatPrice : function(sum) {
 
-            if(!$.isNumeric(sum)) {
+            if(!isNumeric(sum)) {
                 // Logic error somewhere
                 // Let's push through somehow...
                 return "XXX";
@@ -414,6 +424,14 @@
 
 
     };
+
+    /**
+     * From jQuery 1.7 - start using the real thing when 1.7 is widely used
+     */
+    function isNumeric(obj) {
+        return !isNaN( parseFloat(obj) ) && isFinite( obj );
+    }
+
 
     window.CartmanUI = CartmanUI;
 
