@@ -182,16 +182,21 @@
                     <div class="nav-collapse">
                         <ul class="nav">
                             <li class="active">
-                                <a href="#">Demo</a>
+                                <a href="#demo">Demo</a>
                             </li>
 
                             <li>
-                                <a href="#">Features</a>
+                                <a href="#features">Features</a>
                             </li>
 
                             <li>
-                                <a href="#">Usage</a>
+                                <a href="#usage">Usage</a>
                             </li>
+
+                            <li>
+                                <a href="#authors">Authors</a>
+                            </li>
+
 
                         </ul>
                     </div><!--/.nav-collapse -->
@@ -207,7 +212,7 @@
             <div class="hero-unit">
                 <h1>Eric Cartman</h1>
                 <p>
-                    This is a Eric Cartman Javascript shopping cart demo based on Twitter Bootstrap 2.0 layout and Transparency templates.
+                    A modern HTML5 shopping cart implementation
                 </p>
                 <p>
                     <a class="btn btn-primary btn-large" href="https://github.com/miohtama/Eric-Cartman">View on GitHub &raquo;</a>
@@ -286,7 +291,14 @@
 
             <h1>Features</h1>
 
-            <p>Why Eric Cartman rocks</p>
+            <div class="row">
+                <p class="span6">
+                    Eric Cartman is a backend technology neutral shopping cart implementation done in Javascript, designed
+                    to be integrated to various eCommerce products and custom sites.
+                    It offers various benefits over traditional session based customer tracking.
+                </p>
+            </div>
+
 
             <div class="row">
 
@@ -314,18 +326,59 @@
                     <ul>
                         <li>Supported browsers: all desktop browsers IE7+, all mobile browsers.</li>
                         <li>Javascript is JSLint compatible, commented and follows the best practices.</li>
-                        <li>Modules: <code>cartman.js</code>: logic, <code>cartman-ui.js</code>: UI, <code>test.html</code>: default Transparency templates</li>
-                        <li>Dependencies: jQuery, Transparency</li>
-                        <li><code>eric.cartman</code> Python package contains the default add-on implementation for <a href="http://plone.org">Plone CMS</a></li>
-
+                        <li>Extensible minimalistic JSON model for product data - only required keys are <code>id</code> and <code>count</code></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row">
+                <div class="span4">
+                    <h2>Modules</h2>
+                    <ul>
+                        <li><code>cartman.js</code>: logic</li>
+                        <li><code>cartman-ui.js</code>: UI</li>
+                        <li><code>index.html</code>: default templates</li>
                     </ul>
                 </div>
 
+                <div class="span4">
+                    <h2>Dependencies</h2>
+                    <ul>
+                        <li><a href="jquery.com">jQuery</a>
+                        <li><a href="https://github.com/marcuswestin/store.js">store.js</a>
+                        <li><a href="https://github.com/leonidas/transparency">Transparency templates</a>
+                        <li>Shipped with the downlaod</li>
+                    </ul>
+                </div>
+
+                <div class="span4">
+                    <h2>Integrations</h2>
+                    <ul>
+                        <li><code>collective.cartman</code> for <a href="http://plone.org">Plone CMS</a></li>
+                    </ul>
+                </div>
 
                 <p class="span12 those-cartmen">
                     <span class="label label-info">Info</span> Similarities with the library name and other Eric Cartmen are purely coincidental
                 </p>
             </div>
+
+            <a name="authors"></a>
+
+            <h1>Usage</h1>
+
+            <p>TODO</p>
+
+            <a name="authors"></a>
+
+            <h1>Authors</h1>
+
+            <p>
+                <a href="http://opensourcehacker.com/">Mikko Ohtama</a> (<a href="http://twitter.com/moo9000">Twitter</a>)
+            </p>
+
+            <p></p>
+            <p></p>
+            <p></p>
 
         </div>
         <!-- End of container -->
