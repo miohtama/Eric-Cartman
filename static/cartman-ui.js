@@ -48,7 +48,28 @@
      * - .product
      */
     function CartmanUI(options) {
+
+        // Some trickery to have nested options
+
         $.extend(this, options);
+
+        var selectors = {
+
+            minicart : "#mini-cart",
+
+            minicartTemplate : "#mini-cart-template",
+
+            checkoutPopup : "#checkout-popup",
+
+            // Which element used for animating fly Add button -> cart
+            addToCartAnimator : "img"
+        };
+
+        if(options.selectors) {
+            $.extend(selectors, options.selectors);
+        }
+
+        this.selectors = selectors;
     }
 
     CartmanUI.prototype = {
@@ -56,14 +77,15 @@
         /** Cartman implementation */
         cartman : null,
 
-        miniCartTemplateId : null,
-
-        checkoutListTemplateId : null,
-
         /**
          * Where cart data will be POST'ed when user presses checkout
          */
         checkoutURL : null,
+
+        /**
+         * Various jQuery element selectors used in jQuery actions
+         */
+        selectors : {},
 
         init : function() {
             var self = this;
@@ -72,8 +94,12 @@
 
             this.initProducts();
 
-            var minicart = $("#mini-cart");
-            var checkout = $("#checkout-popup");
+            var minicart = $(this.selectors.minicart);
+            if(minicart.size() === 0) {
+                console.error("Mini cart missing on the page:" + this.selectors.minicart);
+            }
+
+            var checkout = $(this.selectors.checkoutPopup);
 
             $(document).bind("cartchanged", function() {
                 console.log("cartchanged");
@@ -92,7 +118,13 @@
 
             var source = this.getCartTemplateData();
 
-            var template = $("#mini-cart-template");
+            var tid = this.selectors.minicartTemplate;
+
+            var template = $(tid);
+            if(template.size() === 0) {
+                console.error("Mini cart tempate missing:" + tid);
+                return;
+            }
 
             var data = {
 
@@ -338,19 +370,29 @@
             }
         },
 
-
         /**
          * Do item add into basket animation.
          */
         animateAdd : function(elem) {
-            var source = elem.find("img");
-            var target = $("#mini-cart");
 
-            var sourcePosition = source.position();
+            var source = elem.find(this.selectors.addToCartAnimator);
+            var target = $(this.selectors.minicart);
+
+            var sourcePosition = source.offset();
+            if(!sourcePosition) {
+                console.log("sourcePosition not available for animateAdd()");
+                return;
+            }
+
             var stop = sourcePosition.top;
             var sleft = sourcePosition.left;
 
-            var targetPosition = target.position();
+            var targetPosition = target.offset();
+            if(!targetPosition) {
+                console.log("targetPosition not available for animateAdd()");
+                return;
+            }
+
             var targetArea = target;
 
             // Create clone of the source element which will

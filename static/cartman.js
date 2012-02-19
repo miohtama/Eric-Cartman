@@ -4,6 +4,10 @@
 
     "use strict";
 
+    // http://opensourcehacker.com/2011/03/15/everyone-loves-and-hates-console-log/
+    // Ignore console on platforms where it is not available
+    if (typeof(window.console) == "undefined") { console = {}; console.log = console.warn = console.error = function(a) {}; }
+
     /**
      * Array manipulation helper
      *
