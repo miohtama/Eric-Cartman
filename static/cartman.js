@@ -300,6 +300,13 @@
         },
 
         /**
+         * @retutn {String} Cart contents as JSON string
+         */
+        getContentsJSON : function() {
+            return JSON.stringify(this.contents);
+        },
+
+        /**
          * Reflect cart content changes to persistent storage
          */
         updateStore : function() {

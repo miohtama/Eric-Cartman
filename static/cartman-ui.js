@@ -248,6 +248,22 @@
                 elem.data("overlay").close();
             });
 
+            self.setupCheckoutPopup(elem);
+
+        },
+
+        /**
+         * Override to use your favorite Javascript UI toolkit modal dialog functionality.
+         *
+         * By default, we assume jQuery tools is present.
+         *
+         * @param {Object} elem Checkout pop-up elem as jQuery selection
+         */
+        setupCheckoutPopup : function(elem) {
+
+            if(elem.overlay === undefined) {
+                throw new Error("Please include jQuery Tools or your own setupCheckoutPop()");
+            }
 
             elem.find(".close").click(function() {
                 // Because close comes from the template and is not jQuery Tools
@@ -260,7 +276,14 @@
             elem.overlay({
                 close : null,
                 load : false,
-                fixed : true
+                fixed : true,
+
+                // some mask tweaks suitable for modal dialogs
+                mask : {
+                    color: '#aaa',
+                    loadSpeed: 200,
+                    opacity: 0.9
+                }
             });
 
         },
@@ -290,7 +313,7 @@
          * Finalize cart data and POST it to the server
          */
         doCheckout : function() {
-
+            throw new Error("You must implement doCheckout() functionality yourself");
         },
 
         /**
