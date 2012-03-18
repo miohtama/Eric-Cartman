@@ -2,8 +2,8 @@
   var ELEMENT_NODE, Transparency, elementMatcher, elementNodes, matchingElements, prepareContext, renderChildren, renderDirectives, renderFunctionDirectives, renderObjectDirectives, renderValues, setContent, setHtml, setText, _base;
 
   if (typeof jQuery !== "undefined" && jQuery !== null) {
-    jQuery.fn.render = function(models, directives) {
-      Transparency.render(this.get(), models, directives);
+    jQuery.fn.render = function(models, directives, regen) {
+      Transparency.render(this.get(), models, directives, regen);
       return this;
     };
   }
@@ -14,7 +14,7 @@
     module.exports = Transparency;
   }
 
-  Transparency.render = function(contexts, models, directives) {
+  Transparency.render = function(contexts, models, directives, regen) {
     var c, context, e, index, instance, model, parent, sibling, _i, _j, _len, _len2, _len3, _ref;
     if (!contexts) return;
     models || (models = []);
@@ -34,6 +34,7 @@
       sibling = context.nextSibling;
       parent = context.parentNode;
       if (parent != null) parent.removeChild(context);
+      if (regen) context.transparency = {};
       prepareContext(context, models);
       for (index = 0, _len2 = models.length; index < _len2; index++) {
         model = models[index];

@@ -124,6 +124,8 @@
          */
         refreshMiniCart : function(elem) {
 
+            console.log("refreshMiniCart()");
+
             var self = this;
 
             var source = this.getCartTemplateData();
@@ -131,30 +133,39 @@
             var tid = this.selectors.minicartTemplate;
 
             var template = $(tid);
+
             if(template.size() === 0) {
                 console.error("Mini cart tempate missing:" + tid);
                 return;
             }
 
             var data = {
-                filled : {
-                    count : source.count,
-                    total : source.total
-                }
+                count : source.count,
+                total : source.total
             };
+
+            console.log("Got data");
+            console.log(data);
 
             var directives = {
                 // Hide empty cart message element if we have any items in the cart
-                //empty : function(elem) { if(source.count) { elem.remove(); } },
+                'mini-cart-container' : function(elem) {
+                    var $elem = $(elem);
+                    console.log("Updating count:" + source.count);
+                    console.log(elem);
+                    if(source.count) {
+                        $elem.addClass("has-items");
+                    } else {
+                        $elem.removeClass("has-items");
+                    }
+                 }
 
-                // Hide cart controls if there are no picked items
-                //filled : function(elem) { if(!source.count) { elem.remove(); } }
             };
 
             elem.empty();
             elem.append(template.children().clone());
 
-            //elem.render(data, directives);
+            elem.render(data, directives, true);
 
             // Bind minicart link to open the checkout dialog
             elem.find("button").click(function(e) {
@@ -175,7 +186,9 @@
             // Nuke checkout DOM on every refresh
             // so we get rid of possible event handlers
             var template = $("#checkout-popup-template");
-            elem.append(template.children());
+
+            elem.empty();
+            elem.append(template.children().clone());
 
             console.log("refresh");
 
@@ -199,11 +212,8 @@
 
                     "checkout-line":  {
 
-                        // Set logic parameter
+                        // Set logic parameter, used by event handling code
                         "data-id" : function() { return this.id; },
-
-                        // Set visual presentation
-                        text : function() { return this.id; }
 
                     },
 
@@ -243,7 +253,7 @@
             };
 
             // Apply template
-            elem.render(data, directives);
+            elem.render(data, directives, true);
 
             // Bind remote element
             elem.find(".column-remove").click(function() {

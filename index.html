@@ -145,11 +145,11 @@
                 }
 
                 /* By default, display "no entries" message */
-                .checkout-list-root .empty {
+                .empty {
                     display: block;
                 }
 
-                .checkout-list-root .filled {
+                .filled {
                     display: none;
                 }
 
@@ -477,10 +477,14 @@
         <div id="templates" style="display: none">
             <!-- Shopping cart summary appearing on every page -->
             <div id="mini-cart-template">
-                <div>
-                    <i class="icon-shopping-cart icon-white"></i>
-                    <span data-bind="empty"> Your shopping cart is empty. </span>
-                    <span data-bind="filled"> <span>You have </span> <b data-bind="count"></b> <span> items (</span><b data-bind="total"></b> <span> EUR)</span>.
+                <div class="mini-cart-container">
+                    <span class="empty">
+                        <i class="icon-shopping-cart icon-white"></i>
+                        Your shopping cart is empty.
+                    </span>
+                    <span class="filled">
+                        <i class="icon-shopping-cart icon-white"></i>
+                        <span>You have </span> <b data-bind="count"></b> <span> items (</span><b data-bind="total"></b> <span> EUR)</span>.
                         <button class="btn">
                             <i class="icon-edit"></i>
                             Edit
