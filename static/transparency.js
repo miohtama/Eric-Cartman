@@ -341,7 +341,7 @@
   };
 
   elementMatcher = function(element, key) {
-    return element.id === key || element.className.split(' ').indexOf(key) > -1 || element.name === key || element.nodeName.toLowerCase() === key.toLowerCase() || element.getAttribute('data-bind') === key;
+    return element.id === key || element.className.split(' ').indexOf(key) > -1 || element.getAttribute('data-bind') === key;
   };
 
   ELEMENT_NODE = 1;

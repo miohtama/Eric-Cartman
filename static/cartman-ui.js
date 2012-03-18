@@ -213,7 +213,7 @@
                     "checkout-line":  {
 
                         // Set logic parameter, used by event handling code
-                        "data-id" : function() { return this.id; },
+                        "data-id" : function() { return this.id; }
 
                     },
 
@@ -232,7 +232,7 @@
                     },
 
                     // Set image source or hide image
-                    img : function(elem) {
+                    'product-img' : function(elem) {
                         elem = $(elem);
                         if(this.img) {
                             elem.attr("src", this.img);
