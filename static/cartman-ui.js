@@ -328,9 +328,10 @@
             elem.overlay({
                 close : null,
                 load : false,
-                fixed : true,
+                fixed : false,
 
                 // some mask tweaks suitable for modal dialogs
+
                 mask : {
                     color: '#aaa',
                     loadSpeed: 200,

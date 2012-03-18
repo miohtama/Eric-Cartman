@@ -80,11 +80,11 @@
 
                 /* the overlayed element */
                 .simple-overlay {
-
                         /* must be initially hidden */
                         display: none;
                         /* place overlay on top of other elements */
                         z-index: 10000;
+                        position: absolute;
                         /* styling */
                         background-color: white;
                         width: 675px;
@@ -105,6 +105,7 @@
                         width: 35px;
                         /* clean up conflict with bootstrap */
                         opacity: 1.0 !important;
+                        filter: none;
                 }
                 .product-listing {
                         margin: 5px;
@@ -132,6 +133,7 @@
 
                 .product-image {
                         max-width: 150px;
+                        width: 150px;
                         margin: 10px auto;
                         display: block;
                 }
@@ -187,6 +189,7 @@
                 .checkout-list img {
                     max-width: 48px;
                     max-height: 48px;
+                    width: 48px;
                 }
 
                 .checkout-list td.column-price, .checkout-list td.column-total {
@@ -554,7 +557,9 @@
                                     <input data-bind="count" min="0" type="number" val="" />
                                     </td>
                                     <td data-bind="total" class="column-total"></td>
-                                    <td class=column-remove><i class="icon-remove"></i></td>
+                                    <td class=column-remove>
+                                        <i class="icon-remove"></i>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
