@@ -244,6 +244,7 @@
             var item = this.get(id);
 
             if(!item) {
+                console.warn("Tried to remove non-existing item:" + id);
                 return;
             }
 
@@ -317,9 +318,22 @@
          * Fire a cart event.
          *
          * First event parameter is always this cart manager itself.
+         *
+         * @param {Array} args List of passed in arguments
          */
         trigger :function(event, args) {
             $(document).trigger(event, [this] + args);
+        },
+
+        /**
+         * Listen for Cartman events.
+         *
+         * @param {String} type One of Cartman.events pseudo constants
+         *
+         * @param {Function} callback function(event, cartman, arg1, arg2, ...)
+         */
+        on : function(type, callback) {
+            $(document).bind(type, callback);
         }
 
 };

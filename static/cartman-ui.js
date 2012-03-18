@@ -4,6 +4,9 @@
 
     "use strict";
 
+    function hasClass(className, cls) {
+        return className.match(new RegExp('(\\s|^)'+cls+'(\\s|$)'));
+    }
 
     /**
      * From jQuery 1.7 - start using the real thing when 1.7 is widely used
@@ -108,7 +111,7 @@
 
             var checkout = $(this.selectors.checkoutPopup);
 
-            $(document).bind("cartchanged", function() {
+            this.cartman.on("cartchanged", function() {
                 console.log("cartchanged");
                 self.refreshMiniCart(minicart);
                 self.refreshCheckout(checkout);
@@ -134,7 +137,6 @@
             }
 
             var data = {
-
                 filled : {
                     count : source.count,
                     total : source.total
@@ -143,16 +145,16 @@
 
             var directives = {
                 // Hide empty cart message element if we have any items in the cart
-                empty : function(elem) { if(source.count) { elem.remove(); } },
+                //empty : function(elem) { if(source.count) { elem.remove(); } },
 
                 // Hide cart controls if there are no picked items
-                filled : function(elem) { if(!source.count) { elem.remove(); } }
+                //filled : function(elem) { if(!source.count) { elem.remove(); } }
             };
 
             elem.empty();
             elem.append(template.children().clone());
 
-            elem.render(data, directives);
+            //elem.render(data, directives);
 
             // Bind minicart link to open the checkout dialog
             elem.find("button").click(function(e) {
@@ -170,34 +172,74 @@
 
             var data = this.getCartTemplateData();
 
-            var template;
+            // Nuke checkout DOM on every refresh
+            // so we get rid of possible event handlers
+            var template = $("#checkout-popup-template");
+            elem.append(template.children());
 
-            // Use different template for the empty cart
-            // than cart populated with items
-            if(data.count > 0) {
-                template = $("#checkout-popup-template");
-            } else {
-                // Empty :/
-                template = $("#checkout-popup-empty-template");
-            }
-
-            // Explicitly set Transparency template
-            // https://github.com/leonidas/transparency/issues/11
-            elem.data("template", template);
+            console.log("refresh");
 
             // Template directives
             var directives = {
+
+                // Conditionally set CSS state to empty or not
+                // whether we have any products in the list
+                'checkout-list-root' : function(elem) {
+                    var $elem = $(elem);
+
+                    if(data.count) {
+                        $elem.addClass("has-items");
+                    } else {
+                        $elem.removeClass("has-items");
+                    }
+                },
+
                 // Nested directives for product lines
                 products : {
-                    "checkout-line@data-id" : function() { return this.id; },
-                    "count@value" : function() { return this.count; },
+
+                    "checkout-line":  {
+
+                        // Set logic parameter
+                        "data-id" : function() { return this.id; },
+
+                        // Set visual presentation
+                        text : function() { return this.id; }
+
+                    },
+
+                    count : {
+                        value : function() { return this.count; }
+                    },
+
                     price : function() { return self.formatPrice(this.price); },
+
                     total : function() { return self.formatPrice(this.count*this.price); },
-                    // Fill in image column only if image URL is available
-                    "img-url@href" : function(elem) { return this.url; },
-                    "img@src" : function(elem) { if(this.img) { return this.img; } else { elem.remove(); } },
-                    "name@href" : function(elem) { return this.url; }
+
+                    // Set image link click target
+                    'img-url' : {
+                        // Fill in image column only if image URL is available
+                        href : function(elem) { return this.url; }
+                    },
+
+                    // Set image source or hide image
+                    img : function(elem) {
+                        elem = $(elem);
+                        if(this.img) {
+                            elem.attr("src", this.img);
+                        } else {
+                            elem.hide();
+                        }
+                    },
+
+                    // Link target in the name column for the product
+                    name : {
+                        href : function() {
+                            return this.url;
+                        }
+                    }
+
                 }
+
             };
 
             // Apply template
@@ -205,7 +247,7 @@
 
             // Bind remote element
             elem.find(".column-remove").click(function() {
-                console.log("remove");
+                console.log("column remove");
                 var product = $(this).parents(".checkout-line");
                 var id = product.attr("data-id");
                 self.cartman.remove(id);
@@ -481,6 +523,9 @@
 
         /**
          * Formats a price (raw, no currency).
+         *
+         * Override this to have formatting specific to your locale
+         * and currencty (e.g. using , as a decimal separator)
          *
          * Fail-safe fallback to XXX string if the sum is not for some reason a good number
          * (e.g. missing data)

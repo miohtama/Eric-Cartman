@@ -6,13 +6,16 @@
         <link rel=stylesheet href="bootstrap/css/bootstrap-responsive.css">
         <!-- Core logic -->
         <script src="misc/jquery.js"></script>
+        <script type="text/javascript" src="static/transparency.js"></script>
+
         <script src="static/store+json2.min.js"></script>
         <script src="static/cartman.js"></script>
         <!-- Example UI -->
         <script src=" bootstrap/js/bootstrap.js"></script>
         <script src="misc/jquery.tools.min.js"></script>
-        <script src="static/jquery.transparency.min.js"></script>
+
         <script src="static/cartman-ui.js"></script>
+
         <script>
             //<![CDATA[
             /*global $,Cartman,CartmanUI*/
@@ -140,6 +143,26 @@
                 #checkout-popup {
                         padding: 15px;
                 }
+
+                /* By default, display "no entries" message */
+                .checkout-list-root .empty {
+                    display: block;
+                }
+
+                .checkout-list-root .filled {
+                    display: none;
+                }
+
+                /* Deactivate when list has items */
+                .has-items .empty {
+                    display: none;
+                }
+
+                /* Active when list has items */
+                .has-items .filled {
+                    display: block;
+                }
+
                 .checkout-list {
                         width: 100%;
                         border-collapse: collapse;
@@ -474,89 +497,99 @@
             Crude example suitable for Finnish eCommerce site.
             -->
             <div id="checkout-popup-template">
+
                 <a class="close"></a>
-                <table class="checkout-list table table-condensed">
-                    <thead>
-                        <tr>
-                            <th><!-- image --></th>
-                            <th> SKU </th>
-                            <th> Name </th>
-                            <th  class="column-price">
-                            <div>
-                                Price
-                            </div>
-                            <div class=discreet>
-                                (EUR, VAT 23%)
-                            </div></th>
-                            <th class="column-count"> Count </th>
-                            <th class="column-total">
-                            <div>
-                                Total
-                            </div>
-                            <div class=discreet>
-                                (EUR, VAT 23%)
-                            </div></th>
-                            <th> Remove </th>
-                        </tr>
-                    </thead>
-                    <tbody data-bind="products">
-                        <tr class="checkout-line">
-                            <td>
-                                <a data-bind="img-url">
-                                    <img data-bind="img" />
-                                </a>
-                            </td>
-                            <td data-bind="id"></td>
-                            <td>
-                                <a data-bind="name"></a>
-                            </td>
-                            <td data-bind="price" class="column-price"></td>
-                            <td class="column-count">
-                            <input data-bind="count" min="0" type="number" val="" />
-                            </td>
-                            <td data-bind="total" class="column-total"></td>
-                            <td class=column-remove><i class="icon-remove"></i></td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div class="checkout-footer">
-                    <div class="checkout-total">
-                        Total <b data-bind="total"></b> EUR
+
+                <div class="checkout-list-root">
+
+                    <div class="empty">
+                        <p class="empty-checkout">
+                            No items in the cart
+                        </p>
                     </div>
-                    <div class="checkout-buttons">
 
-                        <div class="left">
-                            <button type="button" class="btn btn-danger remove-all">
-                                <i class="icon-white icon-remove"></i>
-                                Remove all
-                            </button>
-                        </div>
+                    <div class="filled">
 
-                        <div class="right">
-                            <button type="button" class="btn update">
-                                <i class="icon-refresh"></i>
-                                Update counts
-                            </button>
+                        <table class="checkout-list table table-condensed">
+                            <thead>
+                                <tr>
+                                    <th><!-- image --></th>
+                                    <th> SKU </th>
+                                    <th> Name </th>
+                                    <th  class="column-price">
+                                    <div>
+                                        Price
+                                    </div>
+                                    <div class=discreet>
+                                        (EUR, VAT 23%)
+                                    </div></th>
+                                    <th class="column-count"> Count </th>
+                                    <th class="column-total">
+                                    <div>
+                                        Total
+                                    </div>
+                                    <div class=discreet>
+                                        (EUR, VAT 23%)
+                                    </div></th>
+                                    <th> Remove </th>
+                                </tr>
+                            </thead>
+                            <tbody data-bind="products">
+                                <tr class="checkout-line">
+                                    <td>
+                                        <a data-bind="img-url">
+                                            <img data-bind="img" />
+                                        </a>
+                                    </td>
+                                    <td data-bind="id"></td>
+                                    <td>
+                                        <a data-bind="name"></a>
+                                    </td>
+                                    <td data-bind="price" class="column-price"></td>
+                                    <td class="column-count">
+                                    <input data-bind="count" min="0" type="number" val="" />
+                                    </td>
+                                    <td data-bind="total" class="column-total"></td>
+                                    <td class=column-remove><i class="icon-remove"></i></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="checkout-footer">
+                            <div class="checkout-total">
+                                Total <b data-bind="total"></b> EUR
+                            </div>
+                            <div class="checkout-buttons">
 
-                            <button type="button" class="btn btn-success checkout">
-                                <i class="icon-white icon-check"></i>
-                                Checkout
-                            </button>
-                        </div>
+                                <div class="left">
+                                    <button type="button" class="btn btn-danger remove-all">
+                                        <i class="icon-white icon-remove"></i>
+                                        Remove all
+                                    </button>
+                                </div>
 
-                        <div style="clear: both">
-                            <!-- -->
+                                <div class="right">
+                                    <button type="button" class="btn update">
+                                        <i class="icon-refresh"></i>
+                                        Update counts
+                                    </button>
+
+                                    <button type="button" class="btn btn-success checkout">
+                                        <i class="icon-white icon-check"></i>
+                                        Checkout
+                                    </button>
+                                </div>
+
+                                <div style="clear: both">
+                                    <!-- -->
+                                </div>
+                            </div>
                         </div>
                     </div>
+
                 </div>
+
             </div>
-            <!-- checkout-popup-tempalte -->
-            <div id="checkout-popup-empty-template">
-                <a class="close"></a>
-                <p class="empty-checkout">
-                    No items in the cart
-                </p>
-            </div>
+
         </div>
     </body>
 </html>

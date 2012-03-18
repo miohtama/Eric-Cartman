@@ -1,5 +1,5 @@
 (function() {
-  var ELEMENT_NODE, Transparency, elementMatcher, elementNodes, matchingElements, prepareContext, renderChildren, renderDirectives, renderValues, setContent, setHtml, setText, _base;
+  var ELEMENT_NODE, Transparency, elementMatcher, elementNodes, matchingElements, prepareContext, renderChildren, renderDirectives, renderFunctionDirectives, renderObjectDirectives, renderValues, setContent, setHtml, setText, _base;
 
   if (typeof jQuery !== "undefined" && jQuery !== null) {
     jQuery.fn.render = function(models, directives) {
@@ -28,7 +28,7 @@
       }
       return _results;
     })() : [contexts];
-    if (!(models instanceof Array)) models = [models];
+    if (!Array.isArray(models)) models = [models];
     for (_i = 0, _len = contexts.length; _i < _len; _i++) {
       context = contexts[_i];
       sibling = context.nextSibling;
@@ -153,6 +153,11 @@
   };
 
   renderDirectives = function(instance, model, directives, index) {
+    renderFunctionDirectives(instance, model, directives, index);
+    return renderObjectDirectives(instance, model, directives, index);
+  };
+
+  renderFunctionDirectives = function(instance, model, directives, index) {
     var attr, directive, directiveFunction, element, key, value, _results;
     _results = [];
     for (key in directives) {
@@ -165,6 +170,7 @@
           for (_i = 0, _len = _ref.length; _i < _len; _i++) {
             element = _ref[_i];
             directive = directiveFunction.call(model, element, index);
+            if (!directive) continue;
             if (typeof directive === 'string') {
               directive = {
                 text: directive
@@ -180,6 +186,53 @@
                 if (!(attr !== 'html' && attr !== 'text')) continue;
                 (_base = element.transparency).attributes || (_base.attributes = {});
                 (_base2 = element.transparency.attributes)[attr] || (_base2[attr] = element.getAttribute(attr));
+                _results3.push(element.setAttribute(attr, value));
+              }
+              return _results3;
+            })());
+          }
+          return _results2;
+        })());
+      }
+    }
+    return _results;
+  };
+
+  renderObjectDirectives = function(instance, model, directives, index) {
+    var attr, directive, element, key, srcValue, value, _results;
+    _results = [];
+    for (key in directives) {
+      directive = directives[key];
+      if (typeof directive === 'object') {
+        _results.push((function() {
+          var _i, _len, _ref, _results2;
+          _ref = matchingElements(instance, key);
+          _results2 = [];
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            element = _ref[_i];
+            if (directive.text) {
+              setText(element, directive.text.call(model, element, index));
+            }
+            if (directive.html) {
+              value = directive.htmt.call(model, element, index);
+              if (value) setHtml(element, value);
+            }
+            _results2.push((function() {
+              var _results3;
+              _results3 = [];
+              for (attr in directive) {
+                value = directive[attr];
+                if (!(attr !== 'html' && attr !== 'text')) continue;
+                if (typeof value === 'object') {
+                  renderObjectDirectives(element, model, value, index);
+                  continue;
+                }
+                if (typeof value === 'string') {} else if (typeof value === 'function') {
+                  srcValue = element.getAttribute(attr);
+                  value = value.call(model, srcValue, index);
+                } else {
+                  throw new Error("Unknown nested directive");
+                }
                 _results3.push(element.setAttribute(attr, value));
               }
               return _results3;
@@ -303,6 +356,12 @@
         break;
       }
       return index;
+    };
+  }
+
+  if (Array.isArray == null) {
+    Array.isArray = function(ob) {
+      return Object.prototype.toString.call(ob) === '[object Array]';
     };
   }
 
