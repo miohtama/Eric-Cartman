@@ -144,15 +144,15 @@
                 total : source.total
             };
 
-            console.log("Got data");
-            console.log(data);
+            //console.log("Got data");
+            //console.log(data);
 
             var directives = {
                 // Hide empty cart message element if we have any items in the cart
                 'mini-cart-container' : function(elem) {
                     var $elem = $(elem);
-                    console.log("Updating count:" + source.count);
-                    console.log(elem);
+                    //console.log("Updating count:" + source.count);
+                    //console.log(elem);
                     if(source.count) {
                         $elem.addClass("has-items");
                     } else {

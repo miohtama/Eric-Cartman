@@ -301,6 +301,13 @@
         },
 
         /**
+         * @return {Boolean} true if any items in the cart
+         */
+        hasContent : function() {
+            return this.contents.length > 0;
+        },
+
+        /**
          * @retutn {String} Cart contents as JSON string
          */
         getContentsJSON : function() {
