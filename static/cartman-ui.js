@@ -323,20 +323,30 @@
                 elem.data("overlay").close();
             });
 
+            var mask = {
+                color: '#aaa',
+                loadSpeed: 200,
+                opacity: 0.9
+
+            };
+
+            // Not supported on granny IE
+            // due to z-index problems
+            // http://stackoverflow.com/questions/1287439/ie7-z-index-problem
+            if($.browser.msie && $.browser.version == "7.0") {
+                mask = null;
+            }
 
             // User jQuery tools to init pop-up
             elem.overlay({
                 close : null,
                 load : false,
-                fixed : false,
+                fixed : true,
 
                 // some mask tweaks suitable for modal dialogs
-
-                mask : {
-                    color: '#aaa',
-                    loadSpeed: 200,
-                    opacity: 0.9
-                }
+                mask : mask,
+                expose : mask
+                //expose : mask // BBB: Old jQuery Tools versions, drop in some poin tof the future
             });
 
         },
@@ -498,7 +508,7 @@
                 left: targetPosition.left
             },
             {
-                duration: 500,
+                duration: 750,
                 // We must remove the element - even if it's invisible
                 // it will block form fields and buttons beneath it
                 complete : function() { $(this).remove(); }
