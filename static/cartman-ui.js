@@ -393,6 +393,7 @@
 
         /*
          * Helper funtion to check if stock saldo is bigger than order amount
+         * NOTE! This is not used atmo. We should add unitSize to the logic for this to be usable
          *
          * @param input Input field which has the item count to add to the basket. 
          * @param item Item data where we get stock amount and can use to get count of items in the cart
@@ -426,7 +427,8 @@
             var handleProductStockSaldo = function(input, product, item) {
                 var button = product.find(".add-button")[0];
 
-                var orderIsPossible = self.stockHasItems(item, input);
+                //NOTE! This is not used atmo. We should add unitSize to the logic for this to be usable
+                /*var orderIsPossible = self.stockHasItems(item, input);
 
                 if(  !orderIsPossible && !button.disabled ) {
                     button.disabled = true;
@@ -436,7 +438,7 @@
                     button.disabled = false;
                     $(button).removeClass("disabled");
                     product.find(".stock-error").remove();
-                }
+                }*/
             };
 
             products.each(function() {
@@ -456,13 +458,15 @@
 
 
                 var addCountInput = product.find(".add-count");
+                
+                //NOTE! This is not used atmo. We should add unitSize to the logic for this to be usable
                 //change event fires only after blur. Also oninput does not work on IE9< so we need the change event too
-                addCountInput[0].oninput = function() {
+                /*addCountInput[0].oninput = function() {
                     handleProductStockSaldo(this, product, item);
                 };
                 addCountInput.change(function() {
                     handleProductStockSaldo(this, product, item);
-                });
+                });*/
 
                 product.find(".add-button").click(function() {
 
@@ -480,7 +484,8 @@
                         self.cartman.add(item);
                         self.animateAdd(product);
 
-                        addCountInput.val(0);
+                        //Commented out for now because stock saldos are not checked so we don't case about this
+                        //addCountInput.val(0);
                     }
 
                 });
